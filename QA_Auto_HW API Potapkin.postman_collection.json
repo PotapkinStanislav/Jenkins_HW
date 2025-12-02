@@ -1,0 +1,1036 @@
+{
+	"info": {
+		"_postman_id": "d7e2d81b-8abd-496d-ab6c-09eb1e083adb",
+		"name": "QA_Auto_HW API Potapkin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19632838",
+		"_collection_link": "https://www.postman.com/grey-station-443422/workspace/qa-pro/collection/19632838-d7e2d81b-8abd-496d-ab6c-09eb1e083adb?action=share&source=collection_link&creator=19632838"
+	},
+	"item": [
+		{
+			"name": "Negative tests - registration",
+			"item": [
+				{
+					"name": "Check user with empty name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"const text = ('\\\"name\\\" is not allowed to be empty');\r",
+									"pm.test(\"Empty filed name\", function () {\r",
+									"    pm.expect(jsonData.message).to.eql(text);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"lastName\": \"Dou\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{pwd}}\",\r\n    \"repeatPassword\": \"{{pwd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filling in the \"Name\" field in Cyrillic",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"const text = ('Name is invalid');\r",
+									"pm.test(\"Name field in Cyrillic\", function () {\r",
+									"    pm.expect(jsonData.message).to.eql(text);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Джон\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{pwd}}\",\r\n  \"repeatPassword\": \"{{pwd}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incorrect input — Re-enter password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"const text = ('Passwords do not match');\r",
+									"pm.test(\"Incorrect input — Re-enter password\", function () {\r",
+									"    pm.expect(jsonData.message).to.eql(text);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"Qwerty123\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password entered without an uppercase letter",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"const text = ('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');\r",
+									"pm.test(\"Password entered without an uppercase letter\", function () {\r",
+									"    pm.expect(jsonData.message).to.eql(text);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"John\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"qwerty123\",\r\n  \"repeatPassword\": \"qwerty123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filling in the \"Last Name\" field with fewer than 2 English characters",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"const text = ('Last Name has to be from 2 to 20 characters long');\r",
+									"pm.test(\"Last Name field with fewer than 2 English characters\", function () {\r",
+									"    pm.expect(jsonData.message).to.eql(text);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"John\",\r\n  \"lastName\": \"D\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"Qwerty123\",\r\n  \"repeatPassword\": \"Qwerty123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create a new user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const email = Math.floor(Math.random() * 1000000).toString() + '@test.com'\r",
+							"pm.collectionVariables.set ('email', email);\r",
+							"\r",
+							"const name = pm.variables.replaceIn ('{{$randomFirstName}}');\r",
+							"pm.collectionVariables.set ('name', name);\r",
+							"\r",
+							"const lastName = pm.variables.replaceIn ('{{$randomLastName}}');\r",
+							"pm.collectionVariables.set ('lastName', lastName);\r",
+							"\r",
+							"const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+							"\r",
+							"if (!emailRegex.test(email)) \r",
+							"{throw new Error(\"Generated email is not in a valid format: \" + email);}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"    type: \"object\",\r",
+							"    required: [\"status\", \"data\"],\r",
+							"    properties: {\r",
+							"        status: { type: \"string\" },\r",
+							"        data: {\r",
+							"            type: \"object\",\r",
+							"            required: [\"userId\", \"photoFilename\", \"distanceUnits\", \"currency\"],\r",
+							"            properties: {\r",
+							"                userId: { type: \"number\" },\r",
+							"                photoFilename: { type: \"string\" },\r",
+							"                distanceUnits: { type: \"string\" },\r",
+							"                currency: { type: \"string\" }\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.test(\"Response matches JSON Schema\", function () {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"pm.collectionVariables.set(\"userId\", response.data.userId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{pwd}}\",\r\n  \"repeatPassword\": \"{{pwd}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edits user's profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response matches request data\", function () {",
+							"    const request = JSON.parse(pm.request.body.raw); ",
+							"    const response = pm.response.json().data;         ",
+							"",
+							"    pm.expect(response.name).to.eql(request.name);",
+							"    pm.expect(response.lastName).to.eql(request.lastName);",
+							"    pm.expect(response.country).to.eql(request.country);",
+							"    ",
+							"    function compareDates(date1, date2) {",
+							"        const d1 = new Date(date1);",
+							"        const d2 = new Date(date2);",
+							"",
+							"        return d1.getFullYear() === d2.getFullYear() &&",
+							"               d1.getMonth() === d2.getMonth() &&",
+							"               d1.getDate() === d2.getDate();",
+							"    }",
+							"",
+							"    const requestDate = request.dateBirth;",
+							"    const responseDate = response.dateBirth;",
+							"    pm.expect(compareDates(requestDate, responseDate)).to.be.true;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const name = pm.variables.replaceIn ('{{$randomFirstName}}');\r",
+							"pm.collectionVariables.set ('name', name);\r",
+							"\r",
+							"const lastName = pm.variables.replaceIn ('{{$randomLastName}}');\r",
+							"pm.collectionVariables.set ('lastName', lastName);\r",
+							"\r",
+							"const country = pm.variables.replaceIn ('{{$randomCountry}}');\r",
+							"pm.collectionVariables.set ('country', country);\r",
+							"\r",
+							"const timestamp = Date.now();\r",
+							"const photo = `user-${timestamp}.jpg`;\r",
+							"pm.collectionVariables.set('photo', photo);\r",
+							"\r",
+							"function randomDate(startYear = 1940, endYear = 2005) {\r",
+							"    const start = new Date(`${startYear}-01-01`).getTime();\r",
+							"    const end = new Date(`${endYear}-12-31`).getTime();\r",
+							"    const random = new Date(start + Math.random() * (end - start));\r",
+							"\r",
+							"    random.setMilliseconds(0);\r",
+							"\r",
+							"    return random.toISOString();\r",
+							"}\r",
+							"\r",
+							"const dateBirth = randomDate();\r",
+							"pm.collectionVariables.set('dateBirth', dateBirth);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"photo\": \"{{photo}}\",\r\n  \"name\": \"{{name}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"dateBirth\": \"{{dateBirth}}\",\r\n  \"country\": \"{{country}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Changes user's password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check userId matches after password change\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    const expectedUserId = pm.collectionVariables.get(\"userId\");\r",
+							"\r",
+							"    pm.expect(response.data.userId).to.eql(expectedUserId);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"userId is a number\", function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.have.property(\"userId\");\r",
+							"    pm.expect(typeof jsonData.data.userId).to.eql(\"number\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"{{pwd}}\",\r\n  \"password\": \"{{new_pwd}}\",\r\n  \"repeatPassword\": \"{{new_pwd}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User login to the system",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Data fields have correct types\", function () {\r",
+							"    let data = pm.response.json().data;\r",
+							"    pm.expect(typeof data.userId).to.eql(\"number\");\r",
+							"    pm.expect(typeof data.photoFilename).to.eql(\"string\");\r",
+							"    pm.expect(typeof data.distanceUnits).to.eql(\"string\");\r",
+							"    pm.expect(typeof data.currency).to.eql(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{new_pwd}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.collectionVariables.set('id_car', jsonData.data.id);",
+							"pm.collectionVariables.set(\"initialMileage\", jsonData.data.mileage);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Brand, model and logo are not empty\", function () {",
+							"    let data = pm.response.json().data;",
+							"    pm.expect(data.brand).to.be.a(\"string\").and.not.empty;",
+							"    pm.expect(data.model).to.be.a(\"string\").and.not.empty;",
+							"    pm.expect(data.logo).to.be.a(\"string\").and.not.empty;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carBrandId\": 3,\r\n  \"carModelId\": 13,\r\n  \"mileage\": 950\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cars",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an expenses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Data object has exactly 6 keys\", function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property(\"data\");\r",
+							"    \r",
+							"    pm.expect(Object.keys(jsonData.data).length).to.eql(6);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let lastMileage = pm.collectionVariables.get(\"lastMileage\") || pm.collectionVariables.get(\"initialMileage\") || 0;\r",
+							"\r",
+							"// збільшуємо пробіг на потрібну величину, наприклад 100 км\r",
+							"let newMileage = parseInt(lastMileage) + 100;\r",
+							"\r",
+							"// зберігаємо новий пробіг, щоб наступний запит його теж використав\r",
+							"pm.collectionVariables.set(\"currentMileage\", newMileage);\r",
+							"pm.collectionVariables.set(\"lastMileage\", newMileage);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\": {{id_car}},\r\n  \"reportedAt\": \"{{$isoTimestamp}}\",\r\n  \"mileage\": {{currentMileage}},\r\n  \"liters\": 25,\r\n  \"totalCost\": 580,\r\n  \"forceMileage\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/expenses",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User registration validation",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const data = [\r",
+							"    {\r",
+							"        testCaseName: \"Check user with empty name\",\r",
+							"        testData: {\r",
+							"            name: \"\",\r",
+							"            lastName: \"Dou\",\r",
+							"            email: \"test1@example.com\",\r",
+							"            password: \"Qwerty123\",\r",
+							"            repeatPassword: \"Qwerty123\"\r",
+							"        },\r",
+							"        expectedResult: {\r",
+							"            statusCode: 400,\r",
+							"            message: \"\\\"name\\\" is not allowed to be empty\"\r",
+							"        }\r",
+							"    },\r",
+							"    {\r",
+							"        testCaseName: \"Filling in the Name field in Cyrillic\",\r",
+							"        testData: {\r",
+							"            name: \"Джон\",\r",
+							"            lastName: \"Dou\",\r",
+							"            email: \"test2@example.com\",\r",
+							"            password: \"Qwerty123\",\r",
+							"            repeatPassword: \"Qwerty123\"\r",
+							"        },\r",
+							"        expectedResult: {\r",
+							"            statusCode: 400,\r",
+							"            message: \"Name is invalid\"\r",
+							"        }\r",
+							"    },\r",
+							"    {\r",
+							"        testCaseName: \"Incorrect input — Re-enter password\",\r",
+							"        testData: {\r",
+							"            name: \"John\",\r",
+							"            lastName: \"Dou\",\r",
+							"            email: \"test3@example.com\",\r",
+							"            password: \"Qwerty123\",\r",
+							"            repeatPassword: \"Qwerty12345\"\r",
+							"        },\r",
+							"        expectedResult: {\r",
+							"            statusCode: 400,\r",
+							"            message: \"Passwords do not match\"\r",
+							"        }\r",
+							"    },\r",
+							"    {\r",
+							"        testCaseName: \"Password entered without an uppercase letter\",\r",
+							"        testData: {\r",
+							"            name: \"John\",\r",
+							"            lastName: \"Dou\",\r",
+							"            email: \"test4@example.com\",\r",
+							"            password: \"qwerty123\",\r",
+							"            repeatPassword: \"qwerty123\"\r",
+							"        },\r",
+							"        expectedResult: {\r",
+							"            statusCode: 400,\r",
+							"            message: \"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\"\r",
+							"        }\r",
+							"    },\r",
+							"    {\r",
+							"        testCaseName: \"Last Name field with fewer than 2 English characters\",\r",
+							"        testData: {\r",
+							"            name: \"John\",\r",
+							"            lastName: \"D\",\r",
+							"            email: \"test5@example.com\",\r",
+							"            password: \"Qwerty123\",\r",
+							"            repeatPassword: \"Qwerty123\"\r",
+							"        },\r",
+							"        expectedResult: {\r",
+							"            statusCode: 400,\r",
+							"            message: \"Last Name has to be from 2 to 20 characters long\"\r",
+							"        }\r",
+							"    }\r",
+							"];\r",
+							"\r",
+							"// 2. Ініціалізація лічильників (тільки при першому запуску)\r",
+							"if (!pm.variables.get(\"currentIter\")) {\r",
+							"    pm.variables.set(\"currentIter\", 0);\r",
+							"    pm.variables.set(\"arrayLength\", data.length);\r",
+							"}\r",
+							"\r",
+							"// 3. Поточний кейс\r",
+							"const currentIter = parseInt(pm.variables.get(\"currentIter\"), 10);\r",
+							"const currentCase = data[currentIter];\r",
+							"\r",
+							"// 4. Прокидуємо в змінні для body й тестів\r",
+							"pm.variables.set(\"name\", currentCase.testData.name);\r",
+							"pm.variables.set(\"lastName\", currentCase.testData.lastName);\r",
+							"pm.variables.set(\"email\", currentCase.testData.email);\r",
+							"pm.variables.set(\"password\", currentCase.testData.password);\r",
+							"pm.variables.set(\"repeatPassword\", currentCase.testData.repeatPassword);\r",
+							"\r",
+							"pm.variables.set(\"expectedStatusCode\", currentCase.expectedResult.statusCode);\r",
+							"pm.variables.set(\"expectedMessage\", currentCase.expectedResult.message);\r",
+							"pm.variables.set(\"testCaseName\", currentCase.testCaseName);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const currentIter = parseInt(pm.variables.get(\"currentIter\"), 10);\r",
+							"const arrayLength = parseInt(pm.variables.get(\"arrayLength\"), 10);\r",
+							"\r",
+							"const expectedStatusCode = parseInt(pm.variables.get(\"expectedStatusCode\"), 10);\r",
+							"const expectedMessage = pm.variables.get(\"expectedMessage\");\r",
+							"const testCaseName = pm.variables.get(\"testCaseName\");\r",
+							"\r",
+							"pm.test(`Status code – ${testCaseName}`, function () {\r",
+							"    pm.response.to.have.status(expectedStatusCode);\r",
+							"});\r",
+							"\r",
+							"pm.test(`Validation message – ${testCaseName}`, function () {\r",
+							"    pm.expect(jsonData.message).to.eql(expectedMessage);\r",
+							"});\r",
+							"\r",
+							"if (currentIter + 1 < arrayLength) {\r",
+							"   \r",
+							"    pm.variables.set(\"currentIter\", currentIter + 1);\r",
+							"\r",
+							"    pm.execution.setNextRequest(\"User registration validation\");\r",
+							"} else {\r",
+							"   \r",
+							"    pm.variables.unset(\"currentIter\");\r",
+							"    pm.variables.unset(\"arrayLength\");\r",
+							"    pm.variables.unset(\"expectedStatusCode\");\r",
+							"    pm.variables.unset(\"expectedMessage\");\r",
+							"    pm.variables.unset(\"testCaseName\");\r",
+							"    pm.variables.unset(\"name\");\r",
+							"    pm.variables.unset(\"lastName\");\r",
+							"    pm.variables.unset(\"email\");\r",
+							"    pm.variables.unset(\"password\");\r",
+							"    pm.variables.unset(\"repeatPassword\");\r",
+							"\r",
+							"    pm.execution.setNextRequest(null);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"repeatPassword\": \"{{repeatPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "pwd",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "new_pwd",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "country",
+			"value": ""
+		},
+		{
+			"key": "dateBirth",
+			"value": ""
+		},
+		{
+			"key": "photo",
+			"value": ""
+		},
+		{
+			"key": "id_car",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "initialMileage",
+			"value": ""
+		},
+		{
+			"key": "currentMileage",
+			"value": ""
+		},
+		{
+			"key": "lastMileage",
+			"value": ""
+		}
+	]
+}
